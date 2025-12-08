@@ -28,7 +28,7 @@ y_edge = jnp.linspace(-0.5, 2.0, n_bins + 1)
 x_centers = 0.5 * (x_edge[:-1] + x_edge[1:])
 y_centers = 0.5 * (y_edge[:-1] + y_edge[1:])
 
-T = np.loadtxt("/Users/student/Desktop/transition_matrix_0.01_lag.csv", delimiter=",")
+T = np.loadtxt("/Users/student/Desktop/transition_matrix_0.005_lag.csv", delimiter=",")
 
 zero_rows = np.where(np.isclose(T.sum(axis=1), 0))[0]
 print("Zero rows (unvisited states):", zero_rows)

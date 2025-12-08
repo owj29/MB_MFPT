@@ -1,0 +1,31 @@
+import jax.numpy as jnp
+from jax.experimental import sparse
+from jax.scipy.sparse.linalg import gmres
+import numpy as np
+
+def compute_mfpt_jax(MSM, initial_state, target_state, tol=1e-8):
+    n = MSM.shape[0]
+    
+    mask = jnp.arange(n) != target_state
+    other = jnp.arange(n)[mask]
+
+    MSM_sub = MSM[jnp.ix_(other, other)]
+    sub_sparse = sparse.csr_fromdense(MSM_sub)
+    
+    def matvec(x):
+        return x - sub_sparse @ x
+    
+    b = jnp.ones(len(other))
+    
+    x0 = jnp.zeros(len(other))
+    m_other, info = gmres(matvec, b, x0=x0, tol=tol, atol=0.0)  
+    
+    mfpt = jnp.zeros(n)
+    mfpt = mfpt.at[other].set(m_other)
+    return mfpt[initial_state]
+
+T = np.loadtxt("/Users/student/Desktop/transition_matrix_0.005_lag.csv", delimiter=",")
+tau = 0.005
+
+mfpt = compute_mfpt_jax(T, 45, 37)*tau
+print(mfpt)

@@ -66,14 +66,6 @@ def Trial(init_r, n, m, beta, dt, tf, V, seed, n_bins, lag_time, x_edge, y_edge)
             xs = trajectory[:, 0]
             ys = trajectory[:, 1]
 
-            x_bin = np.digitize(xs, x_edge) - 1
-            y_bin = np.digitize(ys, y_edge) - 1
-
-            valid_mask = ((x_bin >= 0) & (x_bin < n_bins) &
-                          (y_bin >= 0) & (y_bin < n_bins))
-
-            x_bin = x_bin[valid_mask]
-            y_bin = y_bin[valid_mask]
 
             full_x_bin = np.digitize(xs, x_edge) - 1
             full_y_bin = np.digitize(ys, y_edge) - 1
